@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class CarController : MonoBehaviour
 {
@@ -11,14 +12,23 @@ public class CarController : MonoBehaviour
     [SerializeField] private float turn;
     [SerializeField] private float minTurnValue;
     [SerializeField] private float maxSpeed;
+    [SerializeField] private float jumpDuration;
+    [SerializeField] private float jumpOffset;
 
     [SerializeField] private Rigidbody2D rb;
+
+    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField] private SpriteRenderer shadow;
+
+    [SerializeField] private AnimationCurve jumpCurve;
 
     private float accelerationInput;
     private float steeringInput;
 
     private float rotationAngle;
     private float velocity;
+
+    bool isJumping;
 
     private void Awake()
     {
@@ -107,5 +117,43 @@ public class CarController : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void StartJump(float jumpHeight, float jumpPush)
+    {
+        if (!isJumping)
+        {
+            StartCoroutine(Jump(jumpHeight, jumpPush));
+        }
+    }
+
+    private IEnumerator Jump(float jumpHeight, float jumpPush)
+    {
+        isJumping = true;
+
+        float statTime = Time.time;
+
+        while (isJumping) 
+        {
+            float percentage = (Time.time - statTime) / jumpDuration;
+            percentage = Mathf.Clamp01(percentage);
+
+            sprite.transform.localScale = Vector3.one + Vector3.one * jumpCurve.Evaluate(percentage) * jumpHeight;
+            
+            shadow.transform.localPosition = new Vector3(1, -1) * jumpOffset * jumpCurve.Evaluate(percentage) * jumpHeight;
+            shadow.transform.localScale = sprite.transform.localScale * 0.75f;
+
+
+            if (percentage == 1)
+                break;
+
+            yield return null;
+        }
+
+        sprite.transform.localScale = Vector3.one;
+        shadow.transform.localPosition = Vector3.zero;
+        shadow.transform.localScale = Vector3.one;
+
+        isJumping = false;
     }
 }

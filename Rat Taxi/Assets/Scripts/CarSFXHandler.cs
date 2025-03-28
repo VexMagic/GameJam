@@ -52,4 +52,17 @@ public class CarSFXHandler : MonoBehaviour
             tireScreech.volume = Mathf.Lerp(tireScreech.volume, 0, Time.deltaTime * 10);
         }
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        float realtiveVelocity = collision.relativeVelocity.magnitude;
+
+        float volume = realtiveVelocity * 0.1f;
+
+        carHit.pitch = Random.Range(0.95f, 1.05f);
+        carHit.volume = volume;
+
+        if (!carHit.isPlaying)
+            carHit.Play();
+    }
 }
