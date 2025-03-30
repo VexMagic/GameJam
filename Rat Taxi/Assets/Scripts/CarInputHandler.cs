@@ -12,10 +12,5 @@ public class CarInputHandler : MonoBehaviour
         input.y = Input.GetAxis("Vertical");
 
         CarController.instance.SetInputVector(input);
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            CarController.instance.StartJump(0.5f, 0);
-        }
     }
 }

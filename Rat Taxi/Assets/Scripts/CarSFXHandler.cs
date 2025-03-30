@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class CarSFXHandler : MonoBehaviour
 {
+    public static CarSFXHandler instance;
+
     [SerializeField] private AudioSource tireScreech;
     [SerializeField] private AudioSource engine;
     [SerializeField] private AudioSource carHit;
+    [SerializeField] private AudioSource jumping;
+    [SerializeField] private AudioSource landing;
+    [SerializeField] private ParticleSystem angry;
 
     private float enginePitch = 0.5f;
     private float tireScreechPitch = 0.5f;
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Update()
     {
@@ -53,6 +63,16 @@ public class CarSFXHandler : MonoBehaviour
         }
     }
 
+    public void PlayJumpSFX()
+    {
+        jumping.Play();
+    }
+
+    public void PlayLandSFX()
+    {
+        landing.Play();
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         float realtiveVelocity = collision.relativeVelocity.magnitude;
@@ -63,6 +83,13 @@ public class CarSFXHandler : MonoBehaviour
         carHit.volume = volume;
 
         if (!carHit.isPlaying)
+        {
             carHit.Play();
+            if (PassengerManager.instance.hasPassenger)
+            {
+                angry.Play();
+                PassengerManager.instance.crashes++;
+            }
+        }
     }
 }

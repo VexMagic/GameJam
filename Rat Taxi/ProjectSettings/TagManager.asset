@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Jump
+  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -41,8 +43,17 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 770958493
+    locked: 0
   - name: Skidmarks
     uniqueID: 105339451
+    locked: 0
+  - name: Objects
+    uniqueID: 3532481159
+    locked: 0
+  - name: Passenger
+    uniqueID: 3685400283
     locked: 0
   - name: Car
     uniqueID: 2333267857
